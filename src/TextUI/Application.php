@@ -27,6 +27,7 @@ use PHPUnit\Logging\TeamCity\TeamCityLogger;
 use PHPUnit\Logging\TestDox\HtmlRenderer as TestDoxHtmlRenderer;
 use PHPUnit\Logging\TestDox\PlainTextRenderer as TestDoxTextRenderer;
 use PHPUnit\Logging\TestDox\TestResultCollector as TestDoxResultCollector;
+use PHPUnit\Logging\Xml\XmlLogger;
 use PHPUnit\Metadata\Api\CodeCoverage as CodeCoverageMetadataApi;
 use PHPUnit\Runner\Baseline\CannotLoadBaselineException;
 use PHPUnit\Runner\Baseline\Generator as BaselineGenerator;
@@ -576,6 +577,13 @@ final class Application
             );
 
             EventFacade::emitter()->exportObjects();
+        }
+
+        if ($configuration->hasLogfileXml()) {
+            new XmlLogger(
+                OutputFacade::printerFor($configuration->logfileXml()),
+                EventFacade::instance(),
+            );
         }
 
         if ($configuration->hasLogfileJunit()) {
